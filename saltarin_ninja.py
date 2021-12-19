@@ -34,6 +34,8 @@ while not finish:
     clouds.wrap(screen)
     bricks.wrap(screen)
     bird_1.wrap(screen, bricks)
+    if not bird_1.alive:
+        finish = True
     pg.display.update()
     clock.tick(FPS)
 print('hemos terminado')

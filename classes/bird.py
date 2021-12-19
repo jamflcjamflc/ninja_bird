@@ -1,14 +1,18 @@
 import pygame as pg
-from bricks import Bricks
-from bricks import Brick
+from life import Life
+
+
 class Bird:
 
     def __init__(self, pos=(0, 0), r=10, v=(1, 0), g=(0, 2)):
         self.pos = pg.math.Vector2(pos)
+        self.pos_ini = self.pos
         self.ala = 'up'
         self.v = pg.math.Vector2(v)
         self.g = pg.math.Vector2(g)
         self.r = r
+        self.life = Life(pos=pg.math.Vector2((self.pos.x - self.r//2,self.pos.y - self.r - self.r // 2)), h=self.r//4, l=self.r)
+        self.alive = True
 
     def _move(self, screen, aleteo=False):
         self.v = self.v + self.g
@@ -37,6 +41,9 @@ class Bird:
             pg.draw.polygon(screen, (255, 255, 0), [(int(self.pos.x - 14), int(self.pos.y + 6)),
                                                     (int(self.pos.x + 5), int(self.pos.y - 0)),
                                                     (int(self.pos.x - 23), int(self.pos.y + 16))], 0)
+        self.life.pos = pg.math.Vector2((self.pos.x - self.r//2,self.pos.y - self.r - self.r // 2))
+        self.life.draw(screen)
+
 
     def _screen_colision(self, screen, bricks):
         _, _, width, height = screen.get_rect()
@@ -66,6 +73,11 @@ class Bird:
             condition_5 = brick.pos.y > self.pos.y + self.r / 7.0
             condition_6 = brick.pos.y + brick.brick_shape.y + self.r / 7.0 < self.pos.y
             colision = condition_1 and condition_2 and condition_3 and condition_4
+            if not colision and self.pos.x < self.pos_ini.x:
+                self.pos.x += min(1, self.pos_ini.x - self.pos.x)
+                self.life.life -= 0.01/len(bricks.bricks)
+                if self.life.life< 0:
+                    self.alive = False
             if colision:
                 if condition_5:
                     self.pos.y = brick.pos.y - self.r
