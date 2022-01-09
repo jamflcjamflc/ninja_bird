@@ -1,20 +1,26 @@
 import pygame as pg
+import os
+import sys
 from classes.bird import Bird
 from classes.clouds import Clouds
 from classes.bricks import Bricks
+from classes.mosquitoes import Mosquitoes
 
 pg.init()
 SIZE = WIDTH, HEIGHT = 700, 400
 HORIZON = 200
 NCLOUDS = 8
-nubes_file = r"C:\Users\JoseAlfredo\Desktop\lucas_python\MI_PRIMER_VIDEOJUEGO\sprites\nubes_sprite_2x50x50.png"
-bricks_file = r"C:\Users\JoseAlfredo\Desktop\lucas_python\MI_PRIMER_VIDEOJUEGO\sprites\big_brick.png"
+path, _ = os.path.split(os.path.abspath(sys.argv[0]))
+nubes_file = os.path.join(path, "sprites", "nubes_sprite_2x50x50.png")
+bricks_file = os.path.join(path, "sprites", "big_brick.png")
+mosquitoes_file = os.path.join(path, "sprites", "mosquito.png")
 screen = pg.display.set_mode(SIZE)
 FPS = 20
 clock = pg.time.Clock()
 bird_1 = Bird(pos=(WIDTH // 2, HEIGHT // 4), r=20, v=(0, 0), g=(0, 1))
 clouds = Clouds(nubes_file, screen_shape=SIZE, horizon=HORIZON, n=NCLOUDS)
-bricks = Bricks(bricks_file, screen_shape=SIZE,  p=30)
+bricks = Bricks(bricks_file, screen_shape=SIZE,  p=30, v=5)
+mosquitoes = Mosquitoes(mosquitoes_file, screen_shape=SIZE, p=20, v=7)
 finish = False
 while not finish:
     for event in pg.event.get():
@@ -33,6 +39,7 @@ while not finish:
     pg.draw.circle(screen, (255, 255, 0), (5 * WIDTH // 7, HORIZON // 2), 20, 0)
     clouds.wrap(screen)
     bricks.wrap(screen)
+    mosquitoes.wrap(screen)
     bird_1.wrap(screen, bricks)
     if not bird_1.alive:
         finish = True

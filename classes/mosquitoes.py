@@ -1,9 +1,9 @@
 import pygame as pg
 import random
 
-class Bricks:
+class Mosquitoes:
 
-    def __init__(self, ifile, screen_shape=(700, 400), p=100, v=5):
+    def __init__(self, ifile, screen_shape=(700, 400), p=100, v=7):
         self.p = p
         self.ifile = ifile
         self.t = 0
@@ -18,31 +18,29 @@ class Bricks:
                 color = self.sprite.get_at((i, j))
                 if color == (255, 255, 255, 0):
                     self.sprite.set_at((i, j), (255, 255, 255, 255))
-        self.bricks = []
+        self.mosquitoes = []
 
     def _create(self):
         if self.t % self.p == 0:
-            y = random.randint(0, self.screen_shape[1] - 300)
+            y = random.randint(0, self.screen_shape[1])
             pos = (self.screen_shape[0], y)
-            print("brick created")
-            self.bricks.append(Brick(sprite=self.sprite, shape=self.screen_shape, pos=pos, v=self.v))
-            pos = (self.screen_shape[0], y + 200)
-            self.bricks.append(Brick(sprite=self.sprite, shape=self.screen_shape, pos=pos, v=self.v))
+            print("mosquito created")
+            self.mosquitoes.append(Mosquito(sprite=self.sprite, shape=self.screen_shape, pos=pos, v=self.v))
 
     def _destroy(self):
-        for i, brick in enumerate(self.bricks):
-            if brick.pos.x < -self.sprite.get_rect()[2]:
-                self.bricks[i].alive = False
-        self.bricks = [brick for brick in self.bricks if brick.alive]
+        for i, mosquito in enumerate(self.mosquitoes):
+            if mosquito.pos.x < -self.sprite.get_rect()[2]:
+                self.mosquitoes[i].alive = False
+        self.mosquitoes = [mosquito for mosquito in self.mosquitoes if mosquito.alive]
 
 
     def _draw(self, screen):
-        for brick in self.bricks:
-            brick.draw(screen)
+        for mosquito in self.mosquitoes:
+            mosquito.draw(screen)
 
     def _move(self):
-        for i, brick in enumerate(self.bricks):
-            self.bricks[i].move()
+        for i, mosquito in enumerate(self.mosquitoes):
+            self.mosquitoes[i].move()
 
     def wrap(self, screen):
         self.t += 1
@@ -52,19 +50,21 @@ class Bricks:
         self._draw(screen)
 
 
-class Brick:
+class Mosquito:
 
-    def __init__(self, sprite=None, shape=(0, 0), pos=(0, 0), v=5):
+    def __init__(self, sprite=None, shape=(0, 0), pos=(0, 0), v=3):
         self.shape = shape
         self.sprite = sprite
         self.alive = True
         self.pos = pg.math.Vector2(pos)
         self.v = pg.math.Vector2((-v, 0))
-        self.brick_shape = pg.math.Vector2((50, 100))
+        self.mosquito_shape = pg.math.Vector2((30, 20))
+        self.t = 0
 
 
     def draw(self, screen):
-        screen.blit(self.sprite, (int(self.pos.x), int(self.pos.y)))
+        screen.blit(self.sprite, (int(self.pos.x), int(self.pos.y)), area=(0, 12*(self.t%4), 30, 12*(1+self.t%4)))
+        self.t += 1
 
 
     def move(self):

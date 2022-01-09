@@ -1,5 +1,5 @@
 import pygame as pg
-from life import Life
+from classes.life import Life
 
 
 class Bird:
