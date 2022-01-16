@@ -16,8 +16,8 @@ class Mosquitoes:
         for i in range(self.sprite_width):
             for j in range(self.sprite_height):
                 color = self.sprite.get_at((i, j))
-                if color == (255, 255, 255, 0):
-                    self.sprite.set_at((i, j), (255, 255, 255, 255))
+                if color == (255, 255, 255, 255):
+                    self.sprite.set_at((i, j), (255, 255, 255, 0))
         self.mosquitoes = []
 
     def _create(self):
@@ -63,7 +63,7 @@ class Mosquito:
 
 
     def draw(self, screen):
-        screen.blit(self.sprite, (int(self.pos.x), int(self.pos.y)), area=(0, 12*(self.t%4), 30, 12*(1+self.t%4)))
+        screen.blit(self.sprite, (int(self.pos.x), int(self.pos.y)), area=(0, 20*(self.t%4), 30, 20))
         self.t += 1
 
 

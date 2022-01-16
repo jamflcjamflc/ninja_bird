@@ -15,8 +15,9 @@ class Clouds:
         for i in range(self.sprite_width):
             for j in range(self.sprite_height):
                 color = self.sprite.get_at((i, j))
-                if color == (255, 255, 255, 0):
-                    self.sprite.set_at((i, j), (255, 255, 255, 255))
+                if color == (255, 255, 255, 255):
+                    print(color)
+                    self.sprite.set_at((i, j), (255, 255, 255, 0))
         self.clouds = [Cloud(ctype=random.randint(0, 2),
                              sprite=self.sprite,
                              width=self.width,

@@ -5,8 +5,10 @@ from classes.bird import Bird
 from classes.clouds import Clouds
 from classes.bricks import Bricks
 from classes.mosquitoes import Mosquitoes
+from classes.score import Score
 
 pg.init()
+pg.font.init()
 SIZE = WIDTH, HEIGHT = 700, 400
 HORIZON = 200
 NCLOUDS = 8
@@ -21,6 +23,7 @@ bird_1 = Bird(pos=(WIDTH // 2, HEIGHT // 4), r=20, v=(0, 0), g=(0, 1))
 clouds = Clouds(nubes_file, screen_shape=SIZE, horizon=HORIZON, n=NCLOUDS)
 bricks = Bricks(bricks_file, screen_shape=SIZE,  p=30, v=5)
 mosquitoes = Mosquitoes(mosquitoes_file, screen_shape=SIZE, p=20, v=7)
+score = Score(pos=(10, HEIGHT - 20))
 finish = False
 while not finish:
     for event in pg.event.get():
@@ -40,7 +43,7 @@ while not finish:
     clouds.wrap(screen)
     bricks.wrap(screen)
     mosquitoes.wrap(screen)
-    bird_1.wrap(screen, bricks)
+    bird_1.wrap(screen, bricks, mosquitoes)
     if not bird_1.alive:
         finish = True
     pg.display.update()

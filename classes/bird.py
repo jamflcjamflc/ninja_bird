@@ -45,7 +45,7 @@ class Bird:
         self.life.draw(screen)
 
 
-    def _screen_colision(self, screen, bricks):
+    def _screen_colision(self, screen, bricks, mosquitoes):
         _, _, width, height = screen.get_rect()
         #choque horizontal
         """if self.pos.x >= width - self.r and self.v.x > 0:
@@ -89,9 +89,18 @@ class Bird:
                     self.pos.x = brick.pos.x - self.r
                 break
 
-    def wrap(self, screen, bricks):
+        # colision con mosquitoes
+        for i, mosquito in enumerate(mosquitoes.mosquitoes):
+            colision = self.pos.distance_to(mosquito.pos) < self.r
+            if colision:
+                mosquitoes.mosquitoes[i].alive = False
+                self.life.life = min(1.0, self.life.life + 0.1)
+                #self.score.exp += 10
+                break
+
+    def wrap(self, screen, bricks, mosquitoes):
         self._move(screen)
-        self._screen_colision(screen, bricks)
+        self._screen_colision(screen, bricks, mosquitoes)
         self._draw(screen)
 
 
