@@ -19,11 +19,11 @@ mosquitoes_file = os.path.join(path, "sprites", "mosquito.png")
 screen = pg.display.set_mode(SIZE)
 FPS = 20
 clock = pg.time.Clock()
-bird_1 = Bird(pos=(WIDTH // 2, HEIGHT // 4), r=20, v=(0, 0), g=(0, 1))
-clouds = Clouds(nubes_file, screen_shape=SIZE, horizon=HORIZON, n=NCLOUDS)
-bricks = Bricks(bricks_file, screen_shape=SIZE,  p=30, v=5)
-mosquitoes = Mosquitoes(mosquitoes_file, screen_shape=SIZE, p=20, v=7)
 score = Score(pos=(10, HEIGHT - 20))
+bird_1 = Bird(pos=(WIDTH // 2, HEIGHT // 4), r=20, v=(0, 0), g=(0, 1), score=score)
+clouds = Clouds(nubes_file, screen_shape=SIZE, horizon=HORIZON, n=NCLOUDS)
+bricks = Bricks(bricks_file, screen_shape=SIZE,  p=30, v=(-5, 1))
+mosquitoes = Mosquitoes(mosquitoes_file, screen_shape=SIZE, p=20, v=7)
 finish = False
 while not finish:
     for event in pg.event.get():

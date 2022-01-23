@@ -4,7 +4,7 @@ from classes.life import Life
 
 class Bird:
 
-    def __init__(self, pos=(0, 0), r=10, v=(1, 0), g=(0, 2)):
+    def __init__(self, pos=(0, 0), r=10, v=(1, 0), g=(0, 2), score=None):
         self.pos = pg.math.Vector2(pos)
         self.pos_ini = self.pos
         self.ala = 'up'
@@ -13,6 +13,7 @@ class Bird:
         self.r = r
         self.life = Life(pos=pg.math.Vector2((self.pos.x - self.r//2,self.pos.y - self.r - self.r // 2)), h=self.r//4, l=self.r)
         self.alive = True
+        self.score = score
 
     def _move(self, screen, aleteo=False):
         self.v = self.v + self.g
@@ -43,6 +44,7 @@ class Bird:
                                                     (int(self.pos.x - 23), int(self.pos.y + 16))], 0)
         self.life.pos = pg.math.Vector2((self.pos.x - self.r//2,self.pos.y - self.r - self.r // 2))
         self.life.draw(screen)
+        self.score.draw(screen)
 
 
     def _screen_colision(self, screen, bricks, mosquitoes):
@@ -95,7 +97,7 @@ class Bird:
             if colision:
                 mosquitoes.mosquitoes[i].alive = False
                 self.life.life = min(1.0, self.life.life + 0.1)
-                #self.score.exp += 10
+                self.score.exp += 10
                 break
 
     def wrap(self, screen, bricks, mosquitoes):

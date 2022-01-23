@@ -3,7 +3,7 @@ import random
 
 class Bricks:
 
-    def __init__(self, ifile, screen_shape=(700, 400), p=100, v=5):
+    def __init__(self, ifile, screen_shape=(700, 400), p=100, v=(-5, 0)):
         self.p = p
         self.ifile = ifile
         self.t = 0
@@ -21,12 +21,17 @@ class Bricks:
         self.bricks = []
 
     def _create(self):
+
         if self.t % self.p == 0:
+            self.v = (self.v[0], - self.v[1])
             y = random.randint(0, self.screen_shape[1] - 300)
+            pos = (self.screen_shape[0], y - 200)
+            self.bricks.append(Brick(sprite=self.sprite, shape=self.screen_shape, pos=pos, v=self.v))
             pos = (self.screen_shape[0], y)
-            print("brick created")
             self.bricks.append(Brick(sprite=self.sprite, shape=self.screen_shape, pos=pos, v=self.v))
             pos = (self.screen_shape[0], y + 200)
+            self.bricks.append(Brick(sprite=self.sprite, shape=self.screen_shape, pos=pos, v=self.v))
+            pos = (self.screen_shape[0], y + 400)
             self.bricks.append(Brick(sprite=self.sprite, shape=self.screen_shape, pos=pos, v=self.v))
 
     def _destroy(self):
@@ -46,6 +51,8 @@ class Bricks:
 
     def wrap(self, screen):
         self.t += 1
+        if self.t % 200 == 0:
+            self.v = (self.v[0] - 1, 1.1 * self.v[1])
         self._destroy()
         self._create()
         self._move()
@@ -54,12 +61,12 @@ class Bricks:
 
 class Brick:
 
-    def __init__(self, sprite=None, shape=(0, 0), pos=(0, 0), v=5):
+    def __init__(self, sprite=None, shape=(0, 0), pos=(0, 0), v=(-5, 0)):
         self.shape = shape
         self.sprite = sprite
         self.alive = True
         self.pos = pg.math.Vector2(pos)
-        self.v = pg.math.Vector2((-v, 0))
+        self.v = pg.math.Vector2(v)
         self.brick_shape = pg.math.Vector2((50, 100))
 
 
