@@ -15,9 +15,15 @@ class Bird:
         self.alive = True
         self.score = score
 
-    def _move(self, screen, aleteo=False):
+    def _move(self):
         self.v = self.v + self.g
         self.pos = self.pos + self.v
+        if self.pos.x > self.pos_ini.x:
+            self.pos.x = self.pos_ini.x
+        if self.v.x > 0 or self.pos.x < 0:
+            self.life.life -= 0.01
+        if self.life.life < 0:
+            self.alive = False
 
 
     def _draw(self, screen):
@@ -42,7 +48,7 @@ class Bird:
             pg.draw.polygon(screen, (255, 255, 0), [(int(self.pos.x - 14), int(self.pos.y + 6)),
                                                     (int(self.pos.x + 5), int(self.pos.y - 0)),
                                                     (int(self.pos.x - 23), int(self.pos.y + 16))], 0)
-        self.life.pos = pg.math.Vector2((self.pos.x - self.r//2,self.pos.y - self.r - self.r // 2))
+        self.life.pos = pg.math.Vector2((self.pos.x - self.r//2, self.pos.y - self.r - self.r // 2))
         self.life.draw(screen)
         self.score.draw(screen)
 
@@ -75,12 +81,13 @@ class Bird:
             condition_5 = brick.pos.y > self.pos.y + self.r / 7.0
             condition_6 = brick.pos.y + brick.brick_shape.y + self.r / 7.0 < self.pos.y
             colision = condition_1 and condition_2 and condition_3 and condition_4
-            if not colision and self.pos.x < self.pos_ini.x:
-                self.pos.x += min(1, self.pos_ini.x - self.pos.x)
-                self.life.life -= 0.01/len(bricks.bricks)
-                if self.life.life< 0:
-                    self.alive = False
-            if colision:
+            if not colision:
+                if self.pos.x < self.pos_ini.x:
+                    self.v.x = 7
+                else:
+                    self.v.x = 0
+            else:
+                self.v.x = 0
                 if condition_5:
                     self.pos.y = brick.pos.y - self.r
                     self.v.y = 0
@@ -94,6 +101,7 @@ class Bird:
         # colision con mosquitoes
         for i, mosquito in enumerate(mosquitoes.mosquitoes):
             colision = self.pos.distance_to(mosquito.pos) < self.r
+            colision = colision or self.pos.distance_to(mosquito.pos + pg.math.Vector2((0, 20))) < self.r
             if colision:
                 mosquitoes.mosquitoes[i].alive = False
                 self.life.life = min(1.0, self.life.life + 0.1)
@@ -101,7 +109,7 @@ class Bird:
                 break
 
     def wrap(self, screen, bricks, mosquitoes):
-        self._move(screen)
+        self._move()
         self._screen_colision(screen, bricks, mosquitoes)
         self._draw(screen)
 
