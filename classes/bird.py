@@ -4,7 +4,7 @@ from classes.life import Life
 
 class Bird:
 
-    def __init__(self, pos=(0, 0), r=10, v=(1, 0), g=(0, 2), score=None):
+    def __init__(self, pos=(0, 0), r=10, v=(1, 0), g=(0, 2), score=None, eat_sound=None):
         self.pos = pg.math.Vector2(pos)
         self.pos_ini = self.pos
         self.ala = 'up'
@@ -14,6 +14,7 @@ class Bird:
         self.life = Life(pos=pg.math.Vector2((self.pos.x - self.r//2,self.pos.y - self.r - self.r // 2)), h=self.r//4, l=self.r)
         self.alive = True
         self.score = score
+        self.eat_sound = eat_sound
 
     def _move(self):
         self.v = self.v + self.g
@@ -104,6 +105,7 @@ class Bird:
             colision = colision or self.pos.distance_to(mosquito.pos + pg.math.Vector2((0, 20))) < self.r
             if colision:
                 mosquitoes.mosquitoes[i].alive = False
+                self.eat_sound.play()
                 self.life.life = min(1.0, self.life.life + 0.1)
                 self.score.exp += 10
                 break
