@@ -14,7 +14,8 @@ class Intro:
                     finish = True
                     exit_while = True
                 elif event.type == pg.KEYDOWN:
-                    exit_while = True
+                    if event.key == pg.K_SPACE:
+                        exit_while = True
             screen.fill((0, 150, 0))
             screen.blit(self.background, (0, 0))
             pg.display.update()
